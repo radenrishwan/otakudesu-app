@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:otakudesu/data/models/anime.dart';
 import 'package:http/http.dart' as http;
 import 'package:otakudesu/data/models/anime_detail.dart';
+import 'package:otakudesu/data/models/anime_genre.dart';
 import 'package:otakudesu/data/models/anime_list.dart';
 import 'package:otakudesu/data/models/episode.dart';
 import 'package:otakudesu/data/models/episode_detail.dart';
@@ -78,6 +79,69 @@ class AnimeRepository {
     final data = jsonDecode(response.body)['data'] as List<dynamic>;
     for (var element in data) {
       result.add(AnimeList.fromJson(element));
+    }
+
+    return result;
+  }
+
+  Future<List<AnimeGenre>> findAnimeByGenre(String genre, int page) async {
+    final response =
+        await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/genre/$genre?page=$page'));
+    final List<AnimeGenre> result = [];
+
+    if (response.statusCode > 200) {
+      // TODO: handle error
+      log('error : ${response.statusCode}');
+    }
+
+    final data = jsonDecode(response.body)['data'] as List<dynamic>;
+    for (var element in data) {
+      result.add(AnimeGenre.fromJson(element));
+    }
+
+    return result;
+  }
+
+  Future<List<Anime>> findOnGoingAnime(int page) async {
+    final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/ongoing?page=$page'));
+    final List<Anime> result = [];
+
+    if (response.statusCode > 200) {
+      // TODO: handle error
+      log('error : ${response.statusCode}');
+    }
+
+    final data = jsonDecode(response.body)['data'];
+
+    if (data == null) {
+      return result;
+    }
+
+    for (var element in data as List<dynamic>) {
+      result.add(Anime.fromJson(element));
+    }
+
+    return result;
+  }
+
+  Future<List<Anime>> findCompleteAnime(int page) async {
+    final response =
+        await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/complete?page=$page'));
+    final List<Anime> result = [];
+
+    if (response.statusCode > 200) {
+      // TODO: handle error
+      log('error : ${response.statusCode}');
+    }
+
+    final data = jsonDecode(response.body)['data'];
+
+    if (data == null) {
+      return result;
+    }
+
+    for (var element in data as List<dynamic>) {
+      result.add(Anime.fromJson(element));
     }
 
     return result;

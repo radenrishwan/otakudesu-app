@@ -1,12 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otakudesu/bloc/anime_complete_bloc.dart';
+import 'package:otakudesu/bloc/anime_on_going_bloc.dart';
+import 'package:otakudesu/screen/anime_complete_screen.dart';
 import 'package:otakudesu/screen/anime_detail_screen.dart';
 import 'package:otakudesu/screen/anime_list_screen.dart';
 import 'package:otakudesu/screen/episode_detail_sceen.dart';
 import 'package:otakudesu/screen/home_screen.dart';
+import 'package:otakudesu/screen/on_going_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +20,15 @@ void main() async {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
-  runApp(InitialApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AnimeOnGoingBloc()),
+        BlocProvider(create: (context) => AnimeCompleteBloc()),
+      ],
+      child: InitialApp(),
+    ),
+  );
 }
 
 class InitialApp extends StatelessWidget {
@@ -48,6 +61,18 @@ class InitialApp extends StatelessWidget {
         path: '/anime-list',
         builder: (BuildContext context, GoRouterState state) {
           return const AnimeListScreen();
+        },
+      ),
+      GoRoute(
+        path: '/anime/ongoing',
+        builder: (BuildContext context, GoRouterState state) {
+          return const OnGoingScreen();
+        },
+      ),
+      GoRoute(
+        path: '/anime/complete',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AnimeCompleteScreen();
         },
       ),
       GoRoute(

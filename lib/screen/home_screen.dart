@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otakudesu/bloc/anime_complete_bloc.dart';
+import 'package:otakudesu/bloc/anime_on_going_bloc.dart';
 import 'package:otakudesu/data/repository/anime_repository.dart';
 import 'package:otakudesu/helper/constant.dart';
 import 'package:otakudesu/widget/anime_card.dart';
@@ -14,6 +17,36 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Otakudesu"),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final animeList = await AnimeRepository().findAnimeList();
+
+              // Getting data from anime-list
+              showSearch(
+                context: context,
+                delegate: SearchPage(
+                  onQueryUpdate: print,
+                  items: animeList,
+                  searchLabel: 'Search Anime',
+                  suggestion: const Center(
+                    child: Text('Search Anime'),
+                  ),
+                  failure: const Center(
+                    child: Text('No Anime Found'),
+                  ),
+                  filter: (anime) => [anime.title],
+                  sort: (a, b) => a.title.compareTo(b.title),
+                  builder: (anime) => ListTile(
+                    title: Text(anime.title),
+                    onTap: () => GoRouter.of(context).push('/anime/${anime.id}'),
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.search),
+          ),
+        ],
       ),
       body: Padding(
         padding: kDefaultLargePaddingSize,
@@ -66,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(width: kDefaultLargePaddingSize.left),
                   InkWell(
                     onTap: () {
-                      AnimeRepository().findEpisodeDetail('smmr-episode-25-sub-indo');
+                      AnimeRepository().findAnimeByGenre('action', 1);
                     },
                     child: const Chip(
                       label: Text('Genre List'),
@@ -81,8 +114,20 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: kDefaultSmallPaddingSize.left),
-              SizedBox(
-                child: Text('Homepage', style: Theme.of(context).textTheme.titleLarge),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    child: Text('On-Going Anime', style: Theme.of(context).textTheme.titleMedium),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<AnimeOnGoingBloc>().add(AnimeOnGoingFetched());
+                      GoRouter.of(context).push('/anime/ongoing');
+                    },
+                    child: const Text('More'),
+                  ),
+                ],
               ),
               SizedBox(height: kDefaultLargePaddingSize.left),
               FutureBuilder(
@@ -99,22 +144,62 @@ class HomeScreen extends StatelessWidget {
                     );
                   }
 
-                  return GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.75,
-                    crossAxisSpacing: kDefaultSmallPaddingSize.vertical,
-                    mainAxisSpacing: kDefaultSmallPaddingSize.vertical,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: List.generate(
-                      data.length,
-                      (index) => AnimeCard(
-                        anime: data[index],
-                        onTap: () {
-                          GoRouter.of(context).push('/anime/${data[index].id}');
-                        },
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GridView.count(
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: kDefaultSmallPaddingSize.vertical,
+                        mainAxisSpacing: kDefaultSmallPaddingSize.vertical,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: List.generate(
+                          data.length ~/ 2,
+                          (index) => AnimeCard(
+                            anime: data[index],
+                            onTap: () {
+                              GoRouter.of(context).push('/anime/${data[index].id}');
+                            },
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: kDefaultSmallPaddingSize.left),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            child: Text('Complete Anime', style: Theme.of(context).textTheme.titleMedium),
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                context.read<AnimeCompleteBloc>().add(AnimeCompleteFetched());
+                                GoRouter.of(context).push('/anime/complete');
+                              },
+                              child: const Text('More'))
+                        ],
+                      ),
+                      SizedBox(height: kDefaultLargePaddingSize.left),
+                      GridView.count(
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: kDefaultSmallPaddingSize.vertical,
+                        mainAxisSpacing: kDefaultSmallPaddingSize.vertical,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: List.generate(
+                          data.length ~/ 2,
+                          (index) => AnimeCard(
+                            anime: data[index * 2],
+                            onTap: () {
+                              GoRouter.of(context).push('/anime/${data[index * 2].id}');
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
