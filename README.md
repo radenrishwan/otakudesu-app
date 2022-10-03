@@ -7,4 +7,4 @@ unofficial Otakudesu mobile version
 - [ ] in-apps download file
 
 # Preview
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Q02h3vnFaSU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Everything Is AWESOME](https://img.youtube.com/vi/Q02h3vnFaSU/0.jpg)](https://www.youtube.com/watch?v=Q02h3vnFaSU "preview")
