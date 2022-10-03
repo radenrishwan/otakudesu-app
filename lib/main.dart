@@ -32,6 +32,7 @@ class InitialApp extends StatelessWidget {
           primary: Colors.blue.shade200,
         ),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 
