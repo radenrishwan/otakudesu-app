@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otakudesu/bloc/anime_complete_bloc.dart';
-import 'package:otakudesu/bloc/anime_on_going_bloc.dart';
-import 'package:otakudesu/screen/anime_complete_screen.dart';
+import 'package:otakudesu/modules/homepage/bloc/anime_complete_bloc.dart';
+import 'package:otakudesu/modules/homepage/bloc/anime_on_going_bloc.dart';
+import 'package:otakudesu/modules/homepage/screen/anime_complete_screen.dart';
 import 'package:otakudesu/screen/anime_detail_screen.dart';
 import 'package:otakudesu/screen/anime_list_screen.dart';
 import 'package:otakudesu/screen/episode_detail_sceen.dart';
-import 'package:otakudesu/screen/home_screen.dart';
-import 'package:otakudesu/screen/on_going_screen.dart';
+import 'package:otakudesu/modules/homepage/screen/home_screen.dart';
+import 'package:otakudesu/modules/homepage/screen/on_going_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,28 +1,25 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otakudesu/bloc/anime_complete_bloc.dart';
 import 'package:otakudesu/helper/constant.dart';
+import 'package:otakudesu/modules/homepage/bloc/anime_on_going_bloc.dart';
 import 'package:otakudesu/widget/anime_card.dart';
 
-class AnimeCompleteScreen extends StatefulWidget {
-  const AnimeCompleteScreen({super.key});
+class OnGoingScreen extends StatefulWidget {
+  const OnGoingScreen({super.key});
 
   @override
-  State<AnimeCompleteScreen> createState() => AnimeCompleteScreenState();
+  State<OnGoingScreen> createState() => _OnGoingScreenState();
 }
 
-class AnimeCompleteScreenState extends State<AnimeCompleteScreen> {
+class _OnGoingScreenState extends State<OnGoingScreen> {
   final controller = ScrollController();
 
   @override
   void initState() {
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.position.pixels) {
-        log(controller.position.pixels.toString());
-        context.read<AnimeCompleteBloc>().add(AnimeCompleteFetched());
+        context.read<AnimeOnGoingBloc>().add(AnimeOnGoingFetched());
       }
     });
     super.initState();
@@ -38,14 +35,14 @@ class AnimeCompleteScreenState extends State<AnimeCompleteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Complete Anime'),
+        title: const Text('On-Going Anime'),
       ),
       body: Padding(
         padding: kDefaultLargePaddingSize,
-        child: BlocBuilder<AnimeCompleteBloc, AnimeCompleteState>(
+        child: BlocBuilder<AnimeOnGoingBloc, AnimeOnGoingState>(
           builder: (context, state) {
             return GridView.count(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               childAspectRatio: 0.75,
               crossAxisSpacing: kDefaultSmallPaddingSize.vertical,
               mainAxisSpacing: kDefaultSmallPaddingSize.vertical,

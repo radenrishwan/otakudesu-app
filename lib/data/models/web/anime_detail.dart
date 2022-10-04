@@ -1,4 +1,4 @@
-import 'package:otakudesu/data/models/episode.dart';
+import 'package:otakudesu/data/models/web//episode.dart';
 
 class AnimeDetail {
   final String id;

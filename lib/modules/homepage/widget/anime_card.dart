@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:otakudesu/data/models/anime.dart';
+import 'package:otakudesu/data/models/web//anime.dart';
 
 class AnimeCard extends StatelessWidget {
   final Anime anime;
@@ -25,11 +25,13 @@ class AnimeCard extends StatelessWidget {
               width: double.infinity,
               height: 40,
               color: Colors.black.withOpacity(0.4),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Center(
                 child: Text(
                   anime.title,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

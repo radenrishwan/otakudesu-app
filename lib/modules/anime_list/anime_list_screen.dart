@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:otakudesu/data/models/anime_list.dart';
+import 'package:otakudesu/data/models/web//anime_list.dart';
 import 'package:otakudesu/data/repository/anime_repository.dart';
 import 'package:otakudesu/helper/constant.dart';
 import 'package:otakudesu/widget/loading_widget.dart';

@@ -1,25 +1,28 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otakudesu/bloc/anime_on_going_bloc.dart';
 import 'package:otakudesu/helper/constant.dart';
+import 'package:otakudesu/modules/homepage/bloc/anime_complete_bloc.dart';
 import 'package:otakudesu/widget/anime_card.dart';
 
-class OnGoingScreen extends StatefulWidget {
-  const OnGoingScreen({super.key});
+class AnimeCompleteScreen extends StatefulWidget {
+  const AnimeCompleteScreen({super.key});
 
   @override
-  State<OnGoingScreen> createState() => _OnGoingScreenState();
+  State<AnimeCompleteScreen> createState() => AnimeCompleteScreenState();
 }
 
-class _OnGoingScreenState extends State<OnGoingScreen> {
+class AnimeCompleteScreenState extends State<AnimeCompleteScreen> {
   final controller = ScrollController();
 
   @override
   void initState() {
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.position.pixels) {
-        context.read<AnimeOnGoingBloc>().add(AnimeOnGoingFetched());
+        log(controller.position.pixels.toString());
+        context.read<AnimeCompleteBloc>().add(AnimeCompleteFetched());
       }
     });
     super.initState();
@@ -35,14 +38,14 @@ class _OnGoingScreenState extends State<OnGoingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('On-Going Anime'),
+        title: const Text('Complete Anime'),
       ),
       body: Padding(
         padding: kDefaultLargePaddingSize,
-        child: BlocBuilder<AnimeOnGoingBloc, AnimeOnGoingState>(
+        child: BlocBuilder<AnimeCompleteBloc, AnimeCompleteState>(
           builder: (context, state) {
             return GridView.count(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               childAspectRatio: 0.75,
               crossAxisSpacing: kDefaultSmallPaddingSize.vertical,
               mainAxisSpacing: kDefaultSmallPaddingSize.vertical,

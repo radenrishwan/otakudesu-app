@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:otakudesu/data/models/anime.dart';
+import 'package:otakudesu/data/models/web//anime.dart';
 import 'package:http/http.dart' as http;
-import 'package:otakudesu/data/models/anime_detail.dart';
-import 'package:otakudesu/data/models/anime_genre.dart';
-import 'package:otakudesu/data/models/anime_list.dart';
-import 'package:otakudesu/data/models/episode.dart';
-import 'package:otakudesu/data/models/episode_detail.dart';
+import 'package:otakudesu/data/models/web//anime_detail.dart';
+import 'package:otakudesu/data/models/web//anime_genre.dart';
+import 'package:otakudesu/data/models/web//anime_list.dart';
+import 'package:otakudesu/data/models/web//episode.dart';
+import 'package:otakudesu/data/models/web//episode_detail.dart';
 
 class AnimeRepository {
   static final AnimeRepository _instance = AnimeRepository._();
@@ -19,129 +19,183 @@ class AnimeRepository {
   AnimeRepository._();
 
   Future<List<Anime>> findHomePage() async {
-    final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/home'));
     final List<Anime> result = [];
 
-    if (response.statusCode > 200) {
-      // TODO: handle error
-      log('error : ${response.statusCode}');
-    }
+    try {
+      final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/home'));
 
-    final data = jsonDecode(response.body)['data'] as List<dynamic>;
-    for (var element in data) {
-      result.add(Anime.fromJson(element));
+      if (response.statusCode > 200) {
+        // TODO: handle error
+        log('error : ${response.statusCode}');
+      }
+
+      final data = jsonDecode(response.body)['data'] as List<dynamic>;
+      for (var element in data) {
+        result.add(Anime.fromJson(element));
+      }
+    } catch (e) {
+      throw Exception(e);
     }
 
     return result;
   }
 
   Future<AnimeDetail> findAnimeDetail(String id) async {
-    final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/$id'));
+    AnimeDetail result = AnimeDetail(
+      id: '',
+      title: '',
+      thumbnail: '',
+      japaneseTitle: '',
+      score: '',
+      producer: '',
+      type: '',
+      status: '',
+      duration: '',
+      releaseDate: '',
+      studio: '',
+      genre: '',
+      synopsis: '',
+    );
 
-    if (response.statusCode > 200) {
-      // TODO: handle error
-      log('error : ${response.statusCode}');
+    try {
+      final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/$id'));
+
+      if (response.statusCode > 200) {
+        log('error : ${response.statusCode}');
+      }
+
+      final data = jsonDecode(response.body)['data'] as Map<String, dynamic>;
+      result = AnimeDetail.fromJson(data);
+
+      data['episode'].forEach((element) {
+        result.episode.add(Episode.fromJson(element));
+      });
+    } catch (e) {
+      throw Exception(e);
     }
-
-    final data = jsonDecode(response.body)['data'] as Map<String, dynamic>;
-    var result = AnimeDetail.fromJson(data);
-
-    data['episode'].forEach((element) {
-      result.episode.add(Episode.fromJson(element));
-    });
 
     return result;
   }
 
   Future<EpisodeDetail> findEpisodeDetail(String id) async {
-    final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/episode/$id'));
+    var result = EpisodeDetail(
+      id: '',
+      title: '',
+      streamUrl: '',
+      downloadUrls: [],
+    );
 
-    if (response.statusCode > 200) {
-      // TODO: handle error
-      log('error : ${response.statusCode}');
+    try {
+      final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/episode/$id'));
+
+      if (response.statusCode > 200) {
+        log('error : ${response.statusCode}');
+      }
+
+      final data = jsonDecode(response.body)['data'] as Map<String, dynamic>;
+      result = EpisodeDetail.fromJson(data);
+    } catch (e) {
+      throw Exception(e);
     }
-
-    final data = jsonDecode(response.body)['data'] as Map<String, dynamic>;
-    var result = EpisodeDetail.fromJson(data);
 
     return result;
   }
 
   Future<List<AnimeList>> findAnimeList() async {
-    final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime-list'));
     final List<AnimeList> result = [];
 
-    if (response.statusCode > 200) {
-      // TODO: handle error
-      log('error : ${response.statusCode}');
-    }
+    try {
+      final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime-list'));
 
-    final data = jsonDecode(response.body)['data'] as List<dynamic>;
-    for (var element in data) {
-      result.add(AnimeList.fromJson(element));
+      if (response.statusCode > 200) {
+        log('error : ${response.statusCode}');
+      }
+
+      final data = jsonDecode(response.body)['data'] as List<dynamic>;
+      for (var element in data) {
+        result.add(AnimeList.fromJson(element));
+      }
+    } catch (e) {
+      throw Exception(e);
     }
 
     return result;
   }
 
   Future<List<AnimeGenre>> findAnimeByGenre(String genre, int page) async {
-    final response =
-        await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/genre/$genre?page=$page'));
     final List<AnimeGenre> result = [];
 
-    if (response.statusCode > 200) {
-      // TODO: handle error
-      log('error : ${response.statusCode}');
-    }
+    try {
+      final response =
+          await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/genre/$genre?page=$page'));
 
-    final data = jsonDecode(response.body)['data'] as List<dynamic>;
-    for (var element in data) {
-      result.add(AnimeGenre.fromJson(element));
+      if (response.statusCode > 200) {
+        // TODO: handle error
+        log('error : ${response.statusCode}');
+      }
+
+      final data = jsonDecode(response.body)['data'] as List<dynamic>;
+      for (var element in data) {
+        result.add(AnimeGenre.fromJson(element));
+      }
+    } catch (e) {
+      throw Exception(e);
     }
 
     return result;
   }
 
   Future<List<Anime>> findOnGoingAnime(int page) async {
-    final response = await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/ongoing?page=$page'));
     final List<Anime> result = [];
 
-    if (response.statusCode > 200) {
-      // TODO: handle error
-      log('error : ${response.statusCode}');
-    }
+    try {
+      final response =
+          await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/ongoing?page=$page'));
 
-    final data = jsonDecode(response.body)['data'];
+      if (response.statusCode > 200) {
+        // TODO: handle error
+        log('error : ${response.statusCode}');
+      }
 
-    if (data == null) {
-      return result;
-    }
+      final data = jsonDecode(response.body)['data'];
 
-    for (var element in data as List<dynamic>) {
-      result.add(Anime.fromJson(element));
+      if (data == null) {
+        return result;
+      }
+
+      for (var element in data as List<dynamic>) {
+        result.add(Anime.fromJson(element));
+      }
+    } catch (e) {
+      throw Exception(e);
     }
 
     return result;
   }
 
   Future<List<Anime>> findCompleteAnime(int page) async {
-    final response =
-        await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/complete?page=$page'));
     final List<Anime> result = [];
 
-    if (response.statusCode > 200) {
-      // TODO: handle error
-      log('error : ${response.statusCode}');
-    }
+    try {
+      final response =
+          await http.get(Uri.parse('https://scraping-2wepigvexa-et.a.run.app/api/anime/complete?page=$page'));
 
-    final data = jsonDecode(response.body)['data'];
+      if (response.statusCode > 200) {
+        // TODO: handle error
+        log('error : ${response.statusCode}');
+      }
 
-    if (data == null) {
-      return result;
-    }
+      final data = jsonDecode(response.body)['data'];
 
-    for (var element in data as List<dynamic>) {
-      result.add(Anime.fromJson(element));
+      if (data == null) {
+        return result;
+      }
+
+      for (var element in data as List<dynamic>) {
+        result.add(Anime.fromJson(element));
+      }
+    } catch (e) {
+      throw Exception(e);
     }
 
     return result;

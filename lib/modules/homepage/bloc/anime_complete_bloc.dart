@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:otakudesu/data/models/anime.dart';
+import 'package:otakudesu/data/models/web//anime.dart';
 import 'package:otakudesu/data/repository/anime_repository.dart';
 
 part 'anime_complete_event.dart';

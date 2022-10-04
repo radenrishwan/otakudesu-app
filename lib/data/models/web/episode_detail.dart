@@ -1,4 +1,4 @@
-import 'package:otakudesu/data/models/download_url.dart';
+import 'package:otakudesu/data/models/web//download_url.dart';
 
 class EpisodeDetail {
   final String id;
