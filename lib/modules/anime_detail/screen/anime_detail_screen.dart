@@ -117,8 +117,8 @@ class AnimeDetailScreen extends StatelessWidget {
                         color: kDefaultColor,
                       ),
                       SizedBox(height: kDefaultSmallPaddingSize.left),
-                      const Text(
-                        'Suatu hari, Yotsuya Yuusuke dengan teman kelasnya, Shindou Iu dan Hakozaki Kusue dipindahkan ke sebuah dunia Mitologikal. Sesampainya di dunia baru tersebut, mereka bertiga bertemu dengan Game Master. Dalam pertemuannya, GM memberikan sebuah misi dengan batas waktu.Untuk memudahkan mereka dalam menjalankan misi, Shindou dan Hakozaki mendapatkan peran sebagai Wizard dan Warrior. Sementara itu, Yotsuya malah mendapatkan peran sebagai seorang Farmer.Tentu saja keputusan dari GM ini sedikit mengejutkan Shindou dan Hakozaki. Walau begitu, Yotsuya menerima dirinya sebagai seorang Petani dan menjalani hidupnya. Kini, bersama dengan kedua temannya tadi, mereka mulai menjalani kehidupan di dunia baru sembari menjalani misi.Tonton juga kelanjutannya, 100-man no Inochi no Ue ni Ore wa Tatteiru S2.',
+                      Text(
+                        (data.synopsis == '') ? 'No Synopsis' : data.synopsis,
                         textAlign: TextAlign.justify,
                       ),
                       SizedBox(height: kDefaultLargePaddingSize.left),
