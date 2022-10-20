@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otakudesu/data/repository/anime_repository.dart';
 import 'package:otakudesu/helper/constant.dart';
-import 'package:otakudesu/modules/homepage/bloc/anime_complete_bloc.dart';
-import 'package:otakudesu/modules/homepage/bloc/anime_on_going_bloc.dart';
-import 'package:otakudesu/widget/anime_card.dart';
-import 'package:otakudesu/modules/homepage/screen/chip_option_widget.dart';
+import 'package:otakudesu/modules/homepage/bloc/anime_complete/anime_complete_bloc.dart';
+import 'package:otakudesu/modules/homepage/bloc/anime_ongoing/anime_on_going_bloc.dart';
+import 'package:otakudesu/modules/homepage/widget/anime_card.dart';
+import 'package:otakudesu/modules/homepage/widget/chip_option_widget.dart';
+import 'package:otakudesu/modules/homepage/widget/title_widget.dart';
 import 'package:otakudesu/widget/loading_widget.dart';
 import 'package:otakudesu/widget/show_error_widget.dart';
 import 'package:search_page/search_page.dart';
@@ -58,23 +59,13 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const ChipOptionWidget(),
-              SizedBox(height: kDefaultSmallPaddingSize.left),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    child: Text('On-Going Anime', style: Theme.of(context).textTheme.titleMedium),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.read<AnimeOnGoingBloc>().add(AnimeOnGoingFetched());
-                      GoRouter.of(context).push('/anime/ongoing');
-                    },
-                    child: const Text('More'),
-                  ),
-                ],
+              TitleWidget(
+                title: 'On-Going Anime',
+                onPressed: () {
+                  context.read<AnimeOnGoingBloc>().add(AnimeOnGoingFetched());
+                  GoRouter.of(context).push('/anime/ongoing');
+                },
               ),
-              SizedBox(height: kDefaultLargePaddingSize.left),
               FutureBuilder(
                 future: AnimeRepository().findHomePage(),
                 builder: (context, snapshot) {
@@ -128,22 +119,13 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: kDefaultSmallPaddingSize.left),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            child: Text('Complete Anime', style: Theme.of(context).textTheme.titleMedium),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                context.read<AnimeCompleteBloc>().add(AnimeCompleteFetched());
-                                GoRouter.of(context).push('/anime/complete');
-                              },
-                              child: const Text('More'))
-                        ],
+                      TitleWidget(
+                        title: 'Complete Anime',
+                        onPressed: () {
+                          context.read<AnimeCompleteBloc>().add(AnimeCompleteFetched());
+                          GoRouter.of(context).push('/anime/complete');
+                        },
                       ),
-                      SizedBox(height: kDefaultLargePaddingSize.left),
                       GridView.count(
                         shrinkWrap: true,
                         crossAxisCount: 3,
@@ -153,12 +135,14 @@ class HomeScreen extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         children: List.generate(
                           data.length ~/ 2,
-                          (index) => AnimeCard(
-                            anime: data[index * 2],
-                            onTap: () {
-                              GoRouter.of(context).push('/anime/${data[index * 2].id}');
-                            },
-                          ),
+                          (index) {
+                            return AnimeCard(
+                              anime: data[index + data.length ~/ 2],
+                              onTap: () {
+                                GoRouter.of(context).push('/anime/${data[index * 2].id}');
+                              },
+                            );
+                          },
                         ),
                       ),
                     ],

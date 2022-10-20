@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otakudesu/helper/constant.dart';
-import 'package:otakudesu/modules/homepage/bloc/anime_complete_bloc.dart';
-import 'package:otakudesu/widget/anime_card.dart';
+import 'package:otakudesu/modules/homepage/bloc/anime_complete/anime_complete_bloc.dart';
+import 'package:otakudesu/modules/homepage/widget/anime_card.dart';
 
 class AnimeCompleteScreen extends StatefulWidget {
   const AnimeCompleteScreen({super.key});

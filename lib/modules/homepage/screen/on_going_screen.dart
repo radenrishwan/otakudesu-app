@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otakudesu/helper/constant.dart';
-import 'package:otakudesu/modules/homepage/bloc/anime_on_going_bloc.dart';
-import 'package:otakudesu/widget/anime_card.dart';
+import 'package:otakudesu/modules/homepage/bloc/anime_ongoing/anime_on_going_bloc.dart';
+import 'package:otakudesu/modules/homepage/widget/anime_card.dart';
 
 class OnGoingScreen extends StatefulWidget {
   const OnGoingScreen({super.key});
