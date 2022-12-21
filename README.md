@@ -1,5 +1,7 @@
-# Otakudesu APP
+# Otakudesu APP (DEPRECATED)
 unofficial Otakudesu mobile version
+
+this app no longer continue. i have plan to remake with better UI and Code 
 
 # TODO
 - [ ] support batch download url
